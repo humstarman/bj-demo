@@ -12,7 +12,7 @@ URL=gmt.bj.me
 MYSQL_NAME=mysql-proxy
 MYSQL_PORT=3306
 CLUSTER_IP=10.254.0.36
-HOST_IP=192.168.100.42
+MYSQL_IP=192.168.100.42
 
 all: build push deploy
 
@@ -48,7 +48,7 @@ sed:
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.image}}"?"${IMAGE}"?g
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.image.pull.policy}}"?"${IMAGE_PULL_POLICY}"?g
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.cluster.ip}}"?"${CLUSTER_IP}"?g
-	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.host.ip}}"?"${HOST_IP}"?g
+	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.mysql.ip}}"?"${MYSQL_IP}"?g
 
 deploy: cp sed
 	@kubectl create -f ./manifests/.

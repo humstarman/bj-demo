@@ -4,6 +4,6 @@ metadata:
   name: {{.mysql.name}} 
 subsets:
   - addresses:
-      - ip: {{.host.ip}} 
+      - ip: {{.mysql.ip}} 
     ports:
       - port: {{.mysql.port}}
