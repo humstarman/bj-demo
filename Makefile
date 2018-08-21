@@ -9,6 +9,10 @@ IMAGE=${DOCKER_REGISTRY}/${NAME}:${TAG}
 IMAGE_PULL_POLICY=Always
 CONTAINER_NAME=${NAME}
 URL=gmt.bj.me
+MYSQL_NAME=mysql-proxy
+MYSQL_PORT=3306
+CLUSTER_IP=10.254.0.36
+HOST_IP=192.168.100.42
 
 all: build push deploy
 
@@ -36,11 +40,15 @@ cp:
 
 sed:
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.name}}"?"${NAME}"?g
+	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.mysql.name}}"?"${MYSQL_NAME}"?g
+	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.mysql.port}}"?"${MYSQL_PORT}"?g
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.url}}"?"${URL}"?g
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.namespace}}"?"${NAMESPACE}"?g
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.port}}"?"${PORT}"?g
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.image}}"?"${IMAGE}"?g
 	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.image.pull.policy}}"?"${IMAGE_PULL_POLICY}"?g
+	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.cluster.ip}}"?"${CLUSTER_IP}"?g
+	@find ./manifests -type f -name "*.yaml" | xargs sed -i s?"{{.host.ip}}"?"${HOST_IP}"?g
 
 deploy: cp sed
 	@kubectl create -f ./manifests/.
@@ -48,3 +56,9 @@ deploy: cp sed
 clean:
 	@kubectl delete -f ./manifests/.
 	@find ./manifests -type f -name "*.yaml" | xargs rm -f
+
+log:
+	@./scripts/show-log.sh -n ${NAME} -s ${NAMESPACE}
+
+del-pod:
+	@./scripts/del-pod.sh -n ${NAME} -s ${NAMESPACE}
