@@ -35,4 +35,7 @@ fi
 chk_var -n $NAME
 NAMESPACE=${NAMESPACE:-"${DEFAULT_NAMESPACE}"}
 POD=$(kubectl get po -n ${NAMESPACE} | grep ${NAME} | awk -F ' ' '{print $1}')
-[ -z "${POD}" ] || kubectl -n ${NAMESPACE} log -f ${POD}
+if [ -n "${POD}" ]; then
+  POD=$(echo ${POD} | awk -F ' ' '{print $1}')
+  kubectl -n ${NAMESPACE} log -f ${POD}
+fi
