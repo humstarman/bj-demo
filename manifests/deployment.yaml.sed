@@ -4,7 +4,7 @@ metadata:
   namespace: {{.namespace}} 
   name: {{.name}} 
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:

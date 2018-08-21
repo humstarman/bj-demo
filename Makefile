@@ -60,5 +60,8 @@ clean:
 log:
 	@./scripts/show-log.sh -n ${NAME} -s ${NAMESPACE}
 
-del-pod:
+del-pods:
 	@./scripts/del-pod.sh -n ${NAME} -s ${NAMESPACE}
+
+del-pod:
+	@./scripts/del-pod.sh -n ${NAME} -s ${NAMESPACE} -o
